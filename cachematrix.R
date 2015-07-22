@@ -1,39 +1,32 @@
-## Put comments here that give an overall description of what your
-## functions do
+# makeCachematrix creates a special matrix, but also stores functions within
 
-## Write a short comment describing this functi
-
-
-makeCacheMatrix <- function(x = matrix()) { #definition
-  
-  m <- NULL
-  set <- function(y) {
-    x <<- y
-    m <<- NULL
+makeCacheMatrix <- function(x = matrix()) { #definition of the function
+    
+    inv <- NULL # sets the inv parameter to NULL
+    set <- function(y) { # this function sets a new value (user defined) for main function
+    x <<- y               
+    inv <<- NULL          # resets the inv value
   }
-  get <- function() x
-  setinverse <- function(inverse) m <<- inverse
-  getinverse <- function() m
-  list(set = set, get = get,
+  get <- function() x #returns the input matrix
+  setinverse <- function(solve) inv <<- solve #stores the inversed value
+  getinverse <- function() inv #returns the inverse value
+  list(set = set, get = get, #makes a list of all functions within makeCacheMatrix
        setinverse = setinverse,
        getinverse = getinverse)
 }
 
-
-
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
+# this function calculates the inverse of the matrix from the first function
+    
+cacheSolve <- function(x,...) {
   
-  m <- x$getinverse()
-  if(!is.null(m)) {
+  inv <- x$getinverse()   #gets the inverse of the matrix from within makeCacheMatrix
+  if(!is.null(inv)) {     #checks for the value of inverse, if not null, returns the matrix
     message("getting cached data")
-    return(m)
+    return(inv)
   }
-  data <- x$get()
-  m <- solve(data, ...)
-  x$setinverse(m)
-  m
+  data <- x$get()         #if the value of the matrix (inv) within makeCacheMatrix was null, gets the value from the main function 
+  inv <- solve(data)      #makes the inverse of it
+  x$setinverse(inv)       #sets the value of the inverse as a new value of the matrix within makeCacheMatrix
+  inv
 }
 ## Return a matrix that is the inverse of 'x'
